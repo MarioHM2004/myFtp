@@ -32,7 +32,7 @@ int main(int ac, char **av)
 
     recv(server_sock, &server_response, sizeof(server_response), 0);
 
-    printf("The server sent the data: %s\n", server_response);
+    printf("Server said: %s\n", server_response);
 
     close(server_sock);
 
