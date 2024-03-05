@@ -7,6 +7,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
@@ -20,7 +21,9 @@ int main(int ac, char **av)
     return 1;
     }
 
-    char server_message[256] = "Hello World!!!\n";
+    char *message = "Hello World!!!\n";
+    char *server_message = malloc(sizeof(char)*strlen(message) + 1);
+    strcpy(server_message, message);
 
     int server_socket, client_socket;
     server_socket = socket(AF_INET, SOCK_STREAM, 0);
@@ -56,7 +59,6 @@ int main(int ac, char **av)
             exit(1);
         } else if (p == 0) {
             close(server_socket);
-            sleep(5);
             struct sockaddr_in client_addr;
             socklen_t client_addr_len = sizeof(client_addr);
             if (getpeername(client_socket, (struct sockaddr*)&client_addr, &client_addr_len) == -1) {
@@ -65,13 +67,13 @@ int main(int ac, char **av)
             }
             printf("Connection from %s:%d\n", inet_ntoa(client_addr.sin_addr), ntohs(client_addr.sin_port));
 
-            send(client_socket, server_message, sizeof(server_message), 0);
+            send(client_socket, server_message, strlen(server_message)+1, 0);
             close(client_socket);
+            free(server_message);
             exit(0); 
         } else {
             close(client_socket);             
         }
     }
-
     return 0;
 }
