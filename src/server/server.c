@@ -27,7 +27,7 @@ int create_server_socket(int port)
     if (bind(server_socket, (struct sockaddr *)&server_addr, sizeof(server_addr)) == -1) {
         error("Binding failed");
     }
-
+    printf("waiting for client connections...\n");
     listen(server_socket, 5);
     return server_socket;
 }
@@ -58,6 +58,7 @@ void run_server(int server_socket)
             if (FD_ISSET(i, &ready_sockets)) {
                 if (i == server_socket) {
                     int client_socket = accept(server_socket, NULL, NULL);
+                    printf("client connected\n");
                     FD_SET(client_socket, &current_sockets);
                 } else {
                     client_connection(i);
