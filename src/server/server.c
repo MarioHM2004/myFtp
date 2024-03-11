@@ -35,8 +35,11 @@ int create_server_socket(int port)
 void client_connection(int client_socket)
 {
     char *message = "Hello World!!!\n";
-    send(client_socket, message, strlen(message) + 1, 0);
+    char *server_message = malloc(sizeof(char)*strlen(message) + 1);
+    strcpy(server_message, message);
+    send(client_socket, server_message, strlen(server_message)+1, 0);
     close(client_socket);
+    free(server_message);
 }
 
 void run_server(int server_socket)
