@@ -1,8 +1,8 @@
 ##
 ## EPITECH PROJECT, 2024
-## NanoTekSpice
+## makefile
 ## File description:
-## Makefile
+## makefile
 ##
 
 SRC	=	./src/server/server.c				\
