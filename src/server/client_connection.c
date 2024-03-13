@@ -23,36 +23,36 @@ void send_msg_to_client(int server_socket, char *msg)
     free(server_message);
 }
 
-void client_commands(int server_socket, char *client_response, char** command_arr)
+void client_commands(int server_socket,
+    char *client_response, char **command_arr)
 {
-    write(server_socket, command_arr[0], strlen(command_arr[0]));
-    write(server_socket, command_arr[1], strlen(command_arr[1]));
     if (strcmp(command_arr[0], "USER") == 0
-        && strcmp(command_arr[1], "Anonymous") == 0)
+        && strncmp(command_arr[1], "Anonymous", 9) == 0)
         send_msg_to_client(server_socket, "User name okay, need password.\n");
-    else
+    else if (strcmp(command_arr[0], "QUIT") == 0 && !command_arr[1]) {
+        close(server_socket);
+        free(client_response);
+    } else
         command_error(server_socket);
 }
 
 void command_parsing(int server_socket, char *client_response)
 {
+    char *newl = strchr(client_response, '\n');
     char *command = strtok(client_response, " ");
-    char **command_arr = malloc(sizeof(char *) * 2);
-    char *newl = NULL;
+    char **command_arr = malloc(sizeof(char *) * 3);
 
+    if (newl)
+        *newl = 0;
+    memset(command_arr, 0, sizeof(char *) * 3);
     for (int i = 0; command != NULL; i++) {
         if (i >= 3)
             command_error(server_socket);
         command_arr[i] = command;
         command = strtok(NULL, " ");
-        if (command == NULL)
-            continue;
-        newl = strrchr(command, '\n');
-        if (!newl)
-            continue;
-        *newl = '\0';
     }
     client_commands(server_socket, client_response, command_arr);
+    free(command_arr);
 }
 
 void client_connection(int server_socket)
@@ -65,4 +65,3 @@ void client_connection(int server_socket)
     close(server_socket);
     free(client_response);
 }
-
