@@ -5,8 +5,10 @@
 ## makefile
 ##
 
-SRC	=	./src/server/server.c				\
+SRC	=	./src/main.c						\
+		./src/server/server.c				\
 		./src/help.c						\
+		./src/server/client_connection.c	\
 
 OBJ	=	$(SRC:.c=.o)
 
