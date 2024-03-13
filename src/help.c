@@ -21,21 +21,12 @@ void command_error(int server_socket)
 {
     char *msg = "xxx Error (RFC compliant)\n";
     char *error_message = malloc(sizeof(char)*strlen(msg)+1);
+
     strcpy(error_message, msg);
     if (write(server_socket, error_message, strlen(error_message)) == -1) {
         error("write failed");
     }
     free(error_message);
-}
-
-void send_msg_to_client(int server_socket, char *msg)
-{
-    char *server_message = malloc(sizeof(char)*strlen(msg)+1);
-    strcpy(server_message, msg);
-    if (write(server_socket, server_message, strlen(server_message)) == -1) {
-        error("write failed");
-    }
-    free(server_message);
 }
 
 void usage_help(int ac, char **av)
@@ -45,8 +36,7 @@ void usage_help(int ac, char **av)
     <port>  is the port number on which the server socket listens\n\
     <path>  is the path to the home directory for the Anonymous user\n");
         exit(EXIT_SUCCESS);
-    }
-    else if (ac != 3) {
+    } else if (ac != 3) {
         error("usage: ./myftp <port> <path>\n\
     for more info: ./myftp -help");
     }
