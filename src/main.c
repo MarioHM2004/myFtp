@@ -8,15 +8,17 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <arpa/inet.h>
-#include "../include/include.h"
+#include "../include/server.h"
 
 int main(int ac, char **av)
 {
-    int server_socket = 0;
+    struct server_s *server;
+    server = malloc(sizeof(server_s));
 
     usage_help(ac, av);
-    server_socket = create_server_socket(atoi(av[1]));
-    run_server(server_socket);
-    close(server_socket);
+    server->server_socket = create_server_socket(server, atoi(av[1]));
+    run_server(server);
+    close(server->server_socket);
+    free(server);
     return 0;
 }
