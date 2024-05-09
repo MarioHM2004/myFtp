@@ -9,7 +9,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
-#include "../include/include.h"
+#include "../include/server.h"
 
 void error(const char *msg)
 {
@@ -17,13 +17,13 @@ void error(const char *msg)
     exit(EXIT_FAILURE);
 }
 
-void command_error(int server_socket)
+void command_error(server_s *server)
 {
     char *msg = "xxx Error (RFC compliant)\n";
     char *error_message = malloc(sizeof(char)*strlen(msg)+1);
 
     strcpy(error_message, msg);
-    if (write(server_socket, error_message, strlen(error_message)) == -1) {
+    if (write(server->server_socket, error_message, strlen(error_message)) == -1) {
         error("write failed");
     }
     free(error_message);
@@ -36,7 +36,8 @@ void usage_help(int ac, char **av)
     <port>  is the port number on which the server socket listens\n\
     <path>  is the path to the home directory for the Anonymous user\n");
         exit(EXIT_SUCCESS);
-    } else if (ac != 3) {
+    }
+    else if (ac != 3) {
         error("usage: ./myftp <port> <path>\n\
     for more info: ./myftp -help");
     }
