@@ -17,18 +17,6 @@ void error(const char *msg)
     exit(EXIT_FAILURE);
 }
 
-void command_error(server_s *server)
-{
-    char *msg = "xxx Error (RFC compliant)\n";
-    char *error_message = malloc(sizeof(char)*strlen(msg)+1);
-
-    strcpy(error_message, msg);
-    if (write(server->server_socket, error_message, strlen(error_message)) == -1) {
-        error("write failed");
-    }
-    free(error_message);
-}
-
 void usage_help(int ac, char **av)
 {
     if (av[1] && strcmp(av[1], "-help") == 0) {
