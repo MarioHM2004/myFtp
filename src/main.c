@@ -12,8 +12,7 @@
 
 int main(int ac, char **av)
 {
-    struct server_s *server;
-    server = malloc(sizeof(server_s));
+    struct server_s *server = malloc(sizeof(server_s));
 
     usage_help(ac, av);
     server->server_socket = create_server_socket(server, atoi(av[1]));
