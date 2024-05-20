@@ -17,7 +17,7 @@ void error(const char *msg)
     exit(EXIT_FAILURE);
 }
 
-void usage_help(int ac, char **av)
+void args_handling(server_t *server, int ac, char **av)
 {
     if (av[1] && strcmp(av[1], "-help") == 0) {
         printf("USAGE: ./myftp <port> <path>\n\
@@ -29,4 +29,6 @@ void usage_help(int ac, char **av)
         error("usage: ./myftp <port> <path>\n\
     for more info: ./myftp -help");
     }
+    //server->path = av[2];
+    //chdir(server->path);
 }
