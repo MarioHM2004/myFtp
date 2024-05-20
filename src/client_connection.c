@@ -12,22 +12,24 @@
 #include <arpa/inet.h>
 #include "../include/server.h"
 
-void send_msg_to_client(server_s *server, char *msg)
+void send_msg_to_client(server_t *server, const char *msg)
 {
-    char *server_message = malloc(sizeof(char)*strlen(msg)+1);
-
-    strcpy(server_message, msg);
-    if (write(server->i, server_message, strlen(server_message)) == -1) {
-        error("write failed");
+    if (msg == NULL) {
+        return send_msg_to_client(server, "XXX null message :(");
     }
-    free(server_message);
+
+    int length = strlen(msg);
+    write(server->client_socket, msg, length);
+    write(server->client_socket, "\r\n", 2);
 }
 
-void client_commands(server_s *server)
+void client_commands(server_t *server)
 {
     cmd_t commands[] = {
     {"USER", cmd_user},
+    {"PASS", cmd_pass},
     {"QUIT", cmd_quit},
+    {"PWD", cmd_pwd},
     {NULL, NULL}
     };
     for (int i = 0; commands[i].cmd != NULL; i++) {
@@ -35,27 +37,25 @@ void client_commands(server_s *server)
             return commands[i].fn(server, server->command_arr);
         }
     }
-    return command_error(server, "500");
+    return send_msg_to_client(server, message(INVALID_COMMAND));
 }
 
-void client_connection(server_s *server)
+void client_connection(server_t *server)
 {
-    while(1) {
+    while (1) {
         server->client_response = malloc(MAX_BYTES);
         if (server->client_response == NULL) {
             error("malloc failed");
         }
-        if (read(server->i, server->client_response, MAX_BYTES) == -1) {
+        if (read(server->client_socket, server->client_response, MAX_BYTES) == -1) {
             error("read failed");
         }
         char *needle = "\r\n";
         char *found = strstr(server->client_response, needle);
-
         if (found == NULL) {
-            error("no newline found");
+            error("clrf not found");
         }
         *found = '\0';
         command_parsing(server);
-        free(server->client_response);
     }
 }
