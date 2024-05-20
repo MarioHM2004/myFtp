@@ -6,24 +6,29 @@
 */
 
 #include "../include/server.h"
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
-void command_parsing(server_s *server)
+void strip_spaces(char *data)
 {
-    int max_alloc = 1;
-    char *data = server->client_response;
-    char *end = data + strlen(data) - 1;
-    char *current = NULL;
-    int len = 0;
-
     while (*data == ' ') {
         data++;
     }
+}
+
+void trim_trailing_spaces(char *data)
+{
+    char *end = data + strlen(data) - 1;
     while (*end == ' ') {
         *end = '\0';
         end--;
     }
+}
+
+int count_tokens(char *data)
+{
+    int max_alloc = 1;
     for (int i = 0; data[i] != '\0'; i++) {
         if (data[i] == ' ') {
             while (data[i] == ' ') {
@@ -35,11 +40,21 @@ void command_parsing(server_s *server)
             max_alloc++;
         }
     }
-    server->command_arr = malloc(sizeof(char *) * max_alloc);
+    return max_alloc;
+}
+
+void allocate_command_array(server_t *server, int max_alloc)
+{
+    server->command_arr = malloc(sizeof(char *) * max_alloc + 1);
     if (server->command_arr == NULL) {
         error("malloc failed");
     }
-    current = data;
+}
+
+void extract_tokens(server_t *server, char *data, int max_alloc)
+{
+    char *current = data;
+    int len = 0;
     for (int i = 0; i < max_alloc; i++) {
         char *next = strchr(current, ' ');
         if (next == NULL) {
@@ -57,5 +72,16 @@ void command_parsing(server_s *server)
         }
         current = next;
     }
+    server->command_arr[max_alloc] = NULL;
+}
+
+void command_parsing(server_t *server)
+{
+    char *data = server->client_response;
+    strip_spaces(data);
+    trim_trailing_spaces(data);
+    int max_alloc = count_tokens(data);
+    allocate_command_array(server, max_alloc);
+    extract_tokens(server, data, max_alloc);
     client_commands(server);
 }
