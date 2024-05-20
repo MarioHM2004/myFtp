@@ -12,12 +12,14 @@
 
 int main(int ac, char **av)
 {
-    struct server_s *server = malloc(sizeof(server_s));
+    server_t *server = malloc(sizeof(server_t));
 
-    usage_help(ac, av);
+    init_users(server);
+    args_handling(server, ac, av);
     server->server_socket = create_server_socket(server, atoi(av[1]));
     run_server(server);
     close(server->server_socket);
+    free(server->users);
     free(server);
     return 0;
 }
