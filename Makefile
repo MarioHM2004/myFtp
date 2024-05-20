@@ -11,6 +11,8 @@ SRC	=	./src/main.c				\
 		./src/client_connection.c	\
 		./src/cmd.c					\
 		./src/parse.c				\
+		./src/init.c				\
+		./src/messages.c			\
 
 OBJ	=	$(SRC:.c=.o)
 
