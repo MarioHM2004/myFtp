@@ -9,52 +9,62 @@
 #include <stdlib.h>
 #include <string.h>
 #include <sys/select.h>
+#include <sys/socket.h>
 #include <unistd.h>
 #include <arpa/inet.h>
 #include "../include/server.h"
 
-int create_server_socket(server_s *server, int port)
+int create_server_socket(server_t *server, int port)
 {
-    server->server_socket = socket(AF_INET, SOCK_STREAM, 0);
     struct sockaddr_in server_addr;
 
-    if (server->server_socket == -1)
+    server->server_socket = socket(AF_INET, SOCK_STREAM, 0);
+
+    if (server->server_socket < 0)
         error("Socket creation failed");
+    if (setsockopt(server->server_socket, SOL_SOCKET, SO_REUSEADDR, &(int){1}, sizeof(int)) < 0)
+        error("setsockopt(SO_REUSEADDR) failed");
     server_addr.sin_family = AF_INET;
     server_addr.sin_port = htons(port);
     server_addr.sin_addr.s_addr = INADDR_ANY;
     if (bind(server->server_socket, (struct sockaddr *)&server_addr,
         sizeof(server_addr)) == -1) {
-        error("Binding failed");
+        perror("bind");
     }
     printf("waiting for client connections...\n");
     listen(server->server_socket, 5);
     return server->server_socket;
 }
 
-void help_connection(server_s *server)
+void help_connection(server_t *server, int i)
 {
-    if (server->i == server->server_socket) {
-        server->client_socket = accept(server->server_socket, NULL, NULL);
+    if (i == server->server_socket) {
+        socklen_t addr_size = sizeof(server->client_addr);
+        server->client_socket = accept(server->server_socket, (struct sockaddr*)&server->client_addr, &addr_size);
+        if (server->client_socket < 0) {
+            error("client error");
+        }
+        send_msg_to_client(server, "220 Service ready for new user.");
         printf("client connected\n");
         FD_SET(server->client_socket, &(server->current_sockets));
-    } else {
+        } else {
         client_connection(server);
-        FD_CLR(server->i, &(server->current_sockets));
+        FD_CLR(i, &(server->current_sockets));
     }
 }
 
-void connection_manager(server_s *server)
+void connection_manager(server_t *server, int i)
 {
-    for (server->i = 0; server->i < FD_SETSIZE; server->i++) {
-        if (FD_ISSET(server->i, &server->ready_sockets)) {
-            help_connection(server);
+    for (i = 0; i < FD_SETSIZE; i++) {
+        if (FD_ISSET(i, &server->ready_sockets)) {
+            help_connection(server, i);
         }
     }
 }
 
-void run_server(server_s *server)
+void run_server(server_t *server)
 {
+    int i = 0;
     server->client_socket = 0;
 
     FD_ZERO(&server->current_sockets);
@@ -64,6 +74,6 @@ void run_server(server_s *server)
         if (select(FD_SETSIZE, &server->ready_sockets,
             NULL, NULL, NULL) < 0)
             error("select error");
-        connection_manager(server);
+        connection_manager(server, i);
     }
 }
