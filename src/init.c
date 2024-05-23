@@ -10,9 +10,10 @@
 
 void init_users(server_t *server)
 {
-    (*server).users = malloc(sizeof(*server->users));
+    user_t *user = NULL;
 
-    user_t *user = server->users + 0;
+    (*server).users = malloc(sizeof(*server->users));
+    user = server->users + 0;
     user->username = "Anonymous";
     user->password = "";
     user->logged_in = 0;

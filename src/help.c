@@ -24,8 +24,7 @@ void args_handling(server_t *server, int ac, char **av)
     <port>  is the port number on which the server socket listens\n\
     <path>  is the path to the home directory for the Anonymous user\n");
         exit(EXIT_SUCCESS);
-    }
-    else if (ac != 3) {
+    } else if (ac != 3) {
         error("usage: ./myftp <port> <path>\n\
     for more info: ./myftp -help");
     }
