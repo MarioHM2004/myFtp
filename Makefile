@@ -5,14 +5,16 @@
 ## makefile
 ##
 
-SRC	=	./src/main.c				\
-		./src/server.c				\
-		./src/help.c				\
-		./src/client_connection.c	\
-		./src/cmd.c					\
-		./src/parse.c				\
-		./src/init.c				\
-		./src/messages.c			\
+SRC	=	./src/main.c					\
+		./src/server.c					\
+		./src/help.c					\
+		./src/client_connection.c		\
+		./src/cmd.c						\
+		./src/init.c					\
+		./src/messages.c				\
+		./src/parser/command_parser.c	\
+		./src/parser/string_utils.c		\
+		./src/parser/count_tokens.c		\
 
 OBJ	=	$(SRC:.c=.o)
 
