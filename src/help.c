@@ -14,7 +14,7 @@
 void error(const char *msg)
 {
     printf("%s\n", msg);
-    exit(EXIT_FAILURE);
+    exit(84);
 }
 
 void args_handling(server_t *server, int ac, char **av)
