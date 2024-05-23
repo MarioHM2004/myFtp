@@ -65,5 +65,4 @@ void cmd_quit(server_t *server, char **args)
 
 void cmd_pwd(server_t *server, char **args)
 {
-    //send_msg_to_client(server, getcwd(server->path, strlen(server->path)));
 }
