@@ -4,22 +4,23 @@
 ** File description:
 ** header files
 */
- 
+
 #include <netinet/in.h>
 #include <stddef.h>
 #include <sys/select.h>
- 
+#include <stdbool.h>
+
 #ifndef SERVER_H
     #define SERVER_H
     #define MAX_BYTES 1024
- 
+
 typedef struct {
     char *username;
     char *password;
     int logged_in;
     int awaiting_pass;
 } user_t;
- 
+
 typedef struct server {
     char *path;
     struct sockaddr_in client_addr;
@@ -33,14 +34,14 @@ typedef struct server {
     char **command_arr;
     user_t *users;
 } server_t;
- 
+
 typedef void (*cmd_fn_t)(server_t *, char **args);
- 
+
 typedef struct {
     const char *cmd;
     cmd_fn_t fn;
 } cmd_t;
- 
+
 enum ErrorKinds {
     ALL_GOOD,
     INVALID_COMMAND,
@@ -51,10 +52,10 @@ enum ErrorKinds {
     NEED_ACCOUNT,
     _KIND_COUNT,
 };
- 
+
 void args_handling(server_t *server, int ac, char **av);
 void error(const char *msg);
-void send_msg_to_client(server_t *server, const char *msg);
+void msg_client(server_t *server, const char *msg);
 void client_connection(server_t *server, int client_socket);
 void run_server(server_t *server);
 int create_server_socket(server_t *server, int port);
@@ -65,6 +66,11 @@ void cmd_user(server_t *server, char **args);
 void cmd_pass(server_t *server, char **args);
 void cmd_pwd(server_t *server, char **args);
 void init_users(server_t *server);
-const char *message(enum ErrorKinds kind);
- 
+const char *get_messages(enum ErrorKinds kind);
+void strip_spaces(char *data);
+void trim_trailing_spaces(char *data);
+int skip_spaces(char *data, int index);
+bool is_end_of_string(char ch);
+int count_tokens(char *data);
+
 #endif
