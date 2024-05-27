@@ -34,6 +34,7 @@ void client_commands(server_t *server)
     {NULL, NULL}
     };
 
+    init_is_logged(server);
     for (int i = 0; commands[i].cmd != NULL; i++) {
         if (strcmp(server->command_arr[0], commands[i].cmd) == 0) {
             return commands[i].fn(server, server->command_arr);

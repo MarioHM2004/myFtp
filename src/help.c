@@ -28,4 +28,6 @@ void args_handling(server_t *server, int ac, char **av)
         error("usage: ./myftp <port> <path>\n\
     for more info: ./myftp -help");
     }
+    server->path = av[2];
+    init_path(server);
 }

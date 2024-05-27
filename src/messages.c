@@ -14,6 +14,7 @@ void init_messages(char *messages[])
     messages[INVALID_COMMAND] = "500 Syntax error, command unrecognized";
     messages[INVALID_PASSWORD] = "530 Authentication failed.";
     messages[INVALID_USERNAME] = "530 Authentication failed.";
+    messages[NOT_LOGGED_IN] = "530 Please login with USER and PASS.";
     messages[INVALID_ARGUMENTS] =
         "501 Syntax error in parameters or arguments";
     messages[USER_LOGGED] =

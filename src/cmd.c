@@ -18,14 +18,12 @@ void cmd_user(server_t *server, char **args)
     size_t length = 0;
     char *username = args[1];
     user_t *user = server->users;
-    bool is_logged =
-        (user->logged_in & server->client_socket) == server->client_socket;
 
     for (int i = 0; args[i] != NULL; i++)
         length++;
     if (length != 2 || username == NULL)
         return msg_client(server, get_messages(INVALID_ARGUMENTS));
-    if (is_logged && (strcmp(user->username, username) == 0))
+    if (server->is_logged && (strcmp(user->username, username) == 0))
         return msg_client(server, get_messages(USER_LOGGED));
     if (strcmp(user->username, username) != 0)
         return msg_client(server, get_messages(INVALID_USERNAME));
@@ -39,12 +37,10 @@ void cmd_pass(server_t *server, char **args)
 {
     char *password = args[1];
     user_t *user = server->users;
-    bool is_logged =
-        (user->logged_in & server->client_socket) == server->client_socket;
     bool is_awaiting_pass =
         (user->awaiting_pass & server->client_socket) == server->client_socket;
 
-    if (is_logged || !is_awaiting_pass)
+    if (server->is_logged || !is_awaiting_pass)
         return msg_client(server, get_messages(NEED_ACCOUNT));
     if (((strlen(user->password) == 0) && password == NULL)
         || (strcmp(user->password, password) == 0)) {
@@ -73,4 +69,21 @@ void cmd_quit(server_t *server, char **args)
 
 void cmd_pwd(server_t *server, char **args)
 {
+    char *code = "257 ";
+    char *msg = " created.";
+    char *cwd = malloc(1024);
+    char *buff = malloc(1024);
+    int length;
+
+    memset(buff, 0, 1024);
+    if (getcwd(cwd, 1024) != NULL && server->is_logged) {
+        length = strlen(code) + strlen(cwd) + strlen(msg);
+        snprintf(buff, 1024, "%s%s%s", code, cwd, msg);
+        write(server->client_socket, buff, length + 1);
+        write(server->client_socket, "\r\n", 2);
+    } else {
+        msg_client(server, get_messages(NOT_LOGGED_IN));
+    }
+    free(cwd);
+    free(buff);
 }
