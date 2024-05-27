@@ -33,6 +33,7 @@ typedef struct server {
     fd_set ready_sockets;
     char **command_arr;
     user_t *users;
+    bool is_logged;
 } server_t;
 
 typedef void (*cmd_fn_t)(server_t *, char **args);
@@ -47,6 +48,7 @@ enum ErrorKinds {
     INVALID_COMMAND,
     INVALID_PASSWORD,
     INVALID_USERNAME,
+    NOT_LOGGED_IN,
     INVALID_ARGUMENTS,
     USER_LOGGED,
     NEED_ACCOUNT,
@@ -72,5 +74,7 @@ void trim_trailing_spaces(char *data);
 int skip_spaces(char *data, int index);
 bool is_end_of_string(char ch);
 int count_tokens(char *data);
+void init_is_logged(server_t *server);
+void init_path(server_t *server);
 
 #endif
