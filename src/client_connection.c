@@ -31,6 +31,8 @@ void client_commands(server_t *server)
     {"PASS", cmd_pass},
     {"QUIT", cmd_quit},
     {"PWD", cmd_pwd},
+    {"CDUP", cmd_cdup},
+    {"CWD", cmd_cwd},
     {NULL, NULL}
     };
 
