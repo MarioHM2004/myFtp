@@ -70,6 +70,7 @@ void cmd_pass(server_t *server, char **args);
 void cmd_pwd(server_t *server, char **args);
 void cmd_cwd(server_t *server, char **args);
 void cmd_cdup(server_t *server, char **args);
+void cmd_list(server_t *server, char **args);
 void init_users(server_t *server);
 const char *get_messages(enum ErrorKinds kind);
 void strip_spaces(char *data);
