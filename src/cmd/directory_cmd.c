@@ -65,10 +65,13 @@ void reader_conditions(server_t *server, DIR *dir)
 {
     struct dirent *entry;
 
-    while ((entry = readdir(dir))) {
-        if (strcmp(entry->d_name, ".") == 0 || strcmp(entry->d_name, "..") == 0)
-            continue;
-        if (entry->d_name[0] == '.')
+    while (1) {
+        entry = readdir(dir);
+        if (!entry)
+            break;
+        if (strcmp(entry->d_name, ".") == 0
+            || strcmp(entry->d_name, "..") == 0
+            || entry->d_name[0] == '.')
             continue;
         msg_client(server, entry->d_name);
     }
