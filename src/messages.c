@@ -20,6 +20,7 @@ void init_messages(char *messages[])
     messages[USER_LOGGED] =
         "421 User already logged in, closing control connection";
     messages[NEED_ACCOUNT] = "332 Need account for login.";
+    messages[WRONG_PATH] = "550 Failed to change directory.";
 }
 
 const char *get_messages(enum ErrorKinds kind)
