@@ -52,6 +52,7 @@ enum ErrorKinds {
     INVALID_ARGUMENTS,
     USER_LOGGED,
     NEED_ACCOUNT,
+    WRONG_PATH,
     _KIND_COUNT,
 };
 
@@ -67,6 +68,8 @@ void cmd_quit(server_t *server, char **args);
 void cmd_user(server_t *server, char **args);
 void cmd_pass(server_t *server, char **args);
 void cmd_pwd(server_t *server, char **args);
+void cmd_cwd(server_t *server, char **args);
+void cmd_cdup(server_t *server, char **args);
 void init_users(server_t *server);
 const char *get_messages(enum ErrorKinds kind);
 void strip_spaces(char *data);
