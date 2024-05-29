@@ -9,7 +9,9 @@ SRC	=	./src/main.c					\
 		./src/server.c					\
 		./src/help.c					\
 		./src/client_connection.c		\
-		./src/cmd.c						\
+		./src/cmd/directory_cmd.c		\
+		./src/cmd/login_cmd.c			\
+		./src/cmd/quit_cmd.c			\
 		./src/init.c					\
 		./src/messages.c				\
 		./src/parser/command_parser.c	\
