@@ -33,6 +33,7 @@ void client_commands(server_t *server)
     {"PWD", cmd_pwd},
     {"CDUP", cmd_cdup},
     {"CWD", cmd_cwd},
+    {"LIST", cmd_list},
     {NULL, NULL}
     };
 
