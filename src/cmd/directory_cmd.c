@@ -41,7 +41,7 @@ void cmd_cwd(server_t *server, char **args)
 
     for (int i = 0; args[i] != NULL; i++)
         length++;
-    if (length != 2)
+    if (length > 2)
         return msg_client(server, get_messages(INVALID_ARGUMENTS));
     server->path = args[1];
     if (!server->is_logged)
