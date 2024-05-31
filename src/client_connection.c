@@ -34,6 +34,8 @@ void client_commands(server_t *server)
     {"CDUP", cmd_cdup},
     {"CWD", cmd_cwd},
     {"LIST", cmd_list},
+    {"NOOP", cmd_noop},
+    {"DELE", cmd_dele},
     {NULL, NULL}
     };
 

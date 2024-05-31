@@ -21,6 +21,7 @@ void init_messages(char *messages[])
         "421 User already logged in, closing control connection";
     messages[NEED_ACCOUNT] = "332 Need account for login.";
     messages[WRONG_PATH] = "550 Failed to change directory.";
+    messages[INVALID_FILE] = "550 No such file or directory.";
 }
 
 const char *get_messages(enum ErrorKinds kind)
