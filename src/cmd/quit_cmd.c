@@ -25,3 +25,10 @@ void cmd_quit(server_t *server, char **args)
     }
     return msg_client(server, "221 Service closing control connection.");
 }
+
+void cmd_noop(server_t *server, char **args)
+{
+    if (!server->is_logged)
+        return msg_client(server, get_messages(NOT_LOGGED_IN));
+    msg_client(server, "200 Command okay.");
+}
