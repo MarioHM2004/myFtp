@@ -36,6 +36,7 @@ void client_commands(server_t *server)
     {"LIST", cmd_list},
     {"NOOP", cmd_noop},
     {"DELE", cmd_dele},
+    {"PASV", cmd_pasv},
     {NULL, NULL}
     };
 
