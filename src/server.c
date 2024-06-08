@@ -14,21 +14,19 @@
 #include <arpa/inet.h>
 #include "../include/server.h"
 
-int create_server_socket(server_t *server, int port)
+int create_server_socket(server_t *server)
 {
-    struct sockaddr_in server_addr;
-
     server->server_socket = socket(AF_INET, SOCK_STREAM, 0);
     if (server->server_socket < 0)
         error("Socket creation failed");
     if (setsockopt(server->server_socket, SOL_SOCKET,
         SO_REUSEADDR, &(int){1}, sizeof(int)) < 0)
         error("setsockopt(SO_REUSEADDR) failed");
-    server_addr.sin_family = AF_INET;
-    server_addr.sin_port = htons(port);
-    server_addr.sin_addr.s_addr = INADDR_ANY;
-    if (bind(server->server_socket, (struct sockaddr *)&server_addr,
-        sizeof(server_addr)) == -1) {
+    server->server_addr.sin_family = AF_INET;
+    server->server_addr.sin_port = htons(server->port);
+    server->server_addr.sin_addr.s_addr = INADDR_ANY;
+    if (bind(server->server_socket, (struct sockaddr *)&server->server_addr,
+        sizeof(server->server_addr)) == -1) {
         perror("bind");
     }
     printf("waiting for client connections...\n");
