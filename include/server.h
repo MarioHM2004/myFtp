@@ -23,7 +23,10 @@ typedef struct {
 
 typedef struct server {
     char *path;
+    int port;
+    int passive_port;
     struct sockaddr_in client_addr;
+    struct sockaddr_in server_addr;
     int server_socket;
     int client_sockets[FD_SETSIZE];
     int client_socket;
@@ -62,7 +65,7 @@ void error(const char *msg);
 void msg_client(server_t *server, const char *msg);
 void client_connection(server_t *server, int client_socket);
 void run_server(server_t *server);
-int create_server_socket(server_t *server, int port);
+int create_server_socket(server_t *server);
 void client_commands(server_t *server);
 void command_parsing(server_t *server);
 void cmd_quit(server_t *server, char **args);
@@ -74,6 +77,7 @@ void cmd_cdup(server_t *server, char **args);
 void cmd_list(server_t *server, char **args);
 void cmd_noop(server_t *server, char **args);
 void cmd_dele(server_t *server, char **args);
+void cmd_pasv(server_t *server, char **args);
 void init_users(server_t *server);
 const char *get_messages(enum ErrorKinds kind);
 void strip_spaces(char *data);
