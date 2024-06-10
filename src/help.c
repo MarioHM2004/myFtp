@@ -17,6 +17,17 @@ void error(const char *msg)
     exit(84);
 }
 
+char *get_path()
+{
+    char *cwd = malloc(1024);
+
+    if (getcwd(cwd, 1024) == NULL) {
+        error("getcwd error");
+    }
+    return cwd;
+    free(cwd);
+}
+
 void args_handling(server_t *server, int ac, char **av)
 {
     if (av[1] && strcmp(av[1], "-help") == 0) {
@@ -28,6 +39,6 @@ void args_handling(server_t *server, int ac, char **av)
         error("usage: ./myftp <port> <path>\n\
     for more info: ./myftp -help");
     }
-    server->path = av[2];
-    init_path(server);
+    init_path(av);
+    server->path = get_path();
 }
