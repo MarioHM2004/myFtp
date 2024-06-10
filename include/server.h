@@ -86,6 +86,7 @@ int skip_spaces(char *data, int index);
 bool is_end_of_string(char ch);
 int count_tokens(char *data);
 void init_is_logged(server_t *server);
-void init_path(server_t *server);
+void init_path(char **av);
+char *get_path();
 
 #endif
