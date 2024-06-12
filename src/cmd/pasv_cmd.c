@@ -5,6 +5,7 @@
 ** commands functions
 */
 
+#include <time.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -14,72 +15,64 @@
 #include <dirent.h>
 #include "../../include/server.h"
 
-#include <sys/socket.h>
-#include <netinet/in.h>
-#include <arpa/inet.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <unistd.h>
-
-#include <sys/socket.h>
-#include <netinet/in.h>
-#include <arpa/inet.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <unistd.h>
-
-void cmd_pasv(server_t *server, char **args) {
-    char *response = malloc(256);
-    char *ip_address = strdup(inet_ntoa(server->server_addr.sin_addr));
-
-    // Generar un puerto de datos pasivo válido
-    server->passive_port = server->port + 1;
-
-    if (!server->is_logged) {
-        free(ip_address);
-        free(response);
-        return; // Si el usuario no está autenticado, no se procede con el comando PASV
+int accept_data_connection(server_t *server) {
+    struct sockaddr_in client_addr;
+    socklen_t addr_len = sizeof(client_addr);
+    int accepted_data_socket = accept(server->data_socket, (struct sockaddr *)&client_addr, &addr_len);
+    if (accepted_data_socket == -1) {
+        perror("Data connection accept failed");
     }
+    return accepted_data_socket;
+}
 
-    // Crear un nuevo socket para la conexión de datos pasiva
+
+int enter_passive_mode(int *port)
+{
     int data_socket = socket(AF_INET, SOCK_STREAM, 0);
-    if (data_socket == -1) {
-        perror("Error al crear el socket");
-        free(ip_address);
-        free(response);
-        return;
+    struct sockaddr_in data_addr;
+
+    if (data_socket == -1)
+        error("Data socket creation failed");
+    memset(&data_addr, 0, sizeof(data_addr));
+    data_addr.sin_family = AF_INET;
+    data_addr.sin_addr.s_addr = INADDR_ANY;
+    for (;;) {
+        *port = 1025 + rand() % (65535 - 1025);
+        data_addr.sin_port = htons(*port);
+        if (bind(data_socket, (struct sockaddr *)&data_addr, sizeof(data_addr)) == 0)
+            break;
     }
-
-    // Configurar la estructura de dirección del servidor para el nuevo socket
-    struct sockaddr_in server_addr;
-    memset(&server_addr, 0, sizeof(server_addr));
-    server_addr.sin_family = AF_INET;
-    server_addr.sin_addr.s_addr = htonl(INADDR_ANY);
-    server_addr.sin_port = htons(server->passive_port);
-    printf("%d\n", server->passive_port);
-
-    // Conectar al servidor
-    int connect_status = connect(data_socket, (struct sockaddr *)&server_addr, sizeof(server_addr));
-    if (connect_status == -1) {
-        perror("Error al conectar al servidor");
-        free(ip_address);
-        free(response);
+    if (listen(data_socket, 1) == -1) {
         close(data_socket);
+        error("Data socket listen failed");
+    }
+    return data_socket;
+}
+
+void cmd_pasv(server_t *server, char **args)
+{
+    int port;
+    char server_ip[INET_ADDRSTRLEN];
+    unsigned int h1, h2, h3, h4;
+    struct sockaddr_in local_address;
+    int p2 = port % 256;
+    int p1 = port / 256;
+    char response[256];
+    socklen_t address_length = sizeof(local_address);
+
+    server->data_socket = enter_passive_mode(&port);
+    if (getsockname(server->server_socket, (struct sockaddr *)&local_address, &address_length) < 0) {
+        perror("getsockname failed");
+        close(server->data_socket);
         return;
     }
-
-    // Formatear la respuesta para el cliente
-    int p1 = server->passive_port / 256;
-    int p2 = server->passive_port % 256;
-    snprintf(response, 256, "227 Entering Passive Mode (%s,%d,%d).", ip_address, p1, p2);
-
-    // Enviar la respuesta al cliente
+    if (inet_ntop(AF_INET, &(local_address.sin_addr), server_ip, sizeof(server_ip)) == NULL) {
+        perror("inet_ntop failed");
+        close(server->data_socket);
+        return;
+    }
+    sscanf(server_ip, "%u.%u.%u.%u", &h1, &h2, &h3, &h4);
+    snprintf(response, sizeof(response),
+        "227 Entering Passive Mode (%u,%u,%u,%u,%d,%d).", h1, h2, h3, h4, p1, p2);
     msg_client(server, response);
-
-    // Liberar memoria y cerrar el socket
-    free(ip_address);
-    free(response);
-    close(data_socket);
 }
