@@ -13,17 +13,6 @@
 #include <arpa/inet.h>
 #include "../include/server.h"
 
-void msg_client(server_t *server, const char *msg)
-{
-    int length = 0;
-
-    if (msg == NULL)
-        return msg_client(server, "XXX null message :(");
-    length = strlen(msg);
-    write(server->client_socket, msg, length);
-    write(server->client_socket, "\r\n", 2);
-}
-
 void client_commands(server_t *server)
 {
     cmd_t commands[] = {
