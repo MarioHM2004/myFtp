@@ -26,6 +26,7 @@ void init_users(server_t *server)
     user->password = "";
     user->logged_in = 0;
     user->awaiting_pass = 0;
+    server->data_socket = -1;
 }
 
 void init_is_logged(server_t *server)
