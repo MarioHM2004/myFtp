@@ -24,7 +24,7 @@ typedef struct {
 typedef struct server {
     char *path;
     int port;
-    int passive_port;
+    int data_socket;
     struct sockaddr_in client_addr;
     struct sockaddr_in server_addr;
     int server_socket;
@@ -87,5 +87,7 @@ bool is_end_of_string(char ch);
 int count_tokens(char *data);
 void init_is_logged(server_t *server);
 void init_path(server_t *server);
+int accept_data_connection(server_t *server);
+void msg_data_socket(int accepted_data_socket, const char *msg);
 
 #endif
