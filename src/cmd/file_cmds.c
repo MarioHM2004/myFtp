@@ -46,23 +46,16 @@ void cmd_list(server_t *server, char **args)
         length++;
     if (length > 2)
         return msg_client(server, get_messages(INVALID_ARGUMENTS));
-    int accepted_data_socket = accept_data_connection(server);
-    if (accepted_data_socket == -1) {
-        msg_client(server, "425 Can't open data connection.");
-        close(server->data_socket);
-        server->data_socket = -1;
-    } else {
-        path = (args[1] ? args[1] : server->path);
-        dir = opendir(path);
-        if (dir == NULL)
-            return msg_client(server, get_messages(WRONG_PATH));
-        char *listing = reader_conditions(server, dir, args);
-        msg_client(server, "150 Here comes the directory listing.");
-        msg_data_socket(accepted_data_socket, listing);
-        close(accepted_data_socket);
-        close(server->data_socket);
-        server->data_socket = -1;
-        msg_client(server, "226 Directory send OK.");
-        free(listing);
-    }
+    path = (args[1] ? args[1] : server->path);
+    dir = opendir(path);
+    if (dir == NULL)
+        return msg_client(server, get_messages(WRONG_PATH));
+    char *listing = reader_conditions(server, dir, args);
+    msg_client(server, "150 Here comes the directory listing.");
+    msg_data_socket(server->accepted_data_socket, listing);
+    close(server->accepted_data_socket);
+    close(server->data_socket);
+    server->data_socket = -1;
+    msg_client(server, "226 Directory send OK.");
+    free(listing);
 }
