@@ -29,8 +29,9 @@ int create_server_socket(server_t *server)
         sizeof(server->server_addr)) == -1) {
         perror("bind");
     }
+    if (listen(server->server_socket, SOMAXCONN) < 0)
+        error("Listening failed");
     printf("waiting for client connections...\n");
-    listen(server->server_socket, 5);
     return server->server_socket;
 }
 
