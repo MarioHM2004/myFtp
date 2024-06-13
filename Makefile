@@ -12,7 +12,7 @@ SRC	=	./src/main.c					\
 		./src/cmd/directory_cmd.c		\
 		./src/cmd/login_cmd.c			\
 		./src/cmd/quit_cmd.c			\
-		./src/cmd/file_cmds.c			\
+		./src/cmd/list_cmd.c			\
 		./src/cmd/pasv_cmd.c			\
 		./src/init.c					\
 		./src/messages.c				\
