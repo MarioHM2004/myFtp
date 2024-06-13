@@ -9,9 +9,9 @@
 #include <unistd.h>
 #include "../include/server.h"
 
-void init_path(server_t *server)
+void init_path(char **av)
 {
-    if (chdir(server->path) != 0) {
+    if (chdir(av[2]) != 0) {
         error("chdir() error");
     }
 }

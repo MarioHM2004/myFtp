@@ -58,5 +58,4 @@ void msg_data_socket(int accepted_data_socket, const char *msg)
 
     length = strlen(msg);
     write(accepted_data_socket, msg, length);
-    write(accepted_data_socket, "\r\n", 2);
 }

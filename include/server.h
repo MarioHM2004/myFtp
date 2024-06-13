@@ -24,12 +24,13 @@ typedef struct {
 typedef struct server {
     char *path;
     int port;
-    int data_socket;
     struct sockaddr_in client_addr;
     struct sockaddr_in server_addr;
     int server_socket;
     int client_sockets[FD_SETSIZE];
     int client_socket;
+    int data_socket;
+    int accepted_data_socket;
     int max_server_socket_so_far;
     char *client_response;
     fd_set current_sockets;
@@ -86,7 +87,8 @@ int skip_spaces(char *data, int index);
 bool is_end_of_string(char ch);
 int count_tokens(char *data);
 void init_is_logged(server_t *server);
-void init_path(server_t *server);
+void init_path(char **av);
+char *get_path();
 int accept_data_connection(server_t *server);
 void msg_data_socket(int accepted_data_socket, const char *msg);
 
