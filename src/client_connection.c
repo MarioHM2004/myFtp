@@ -13,6 +13,17 @@
 #include <arpa/inet.h>
 #include "../include/server.h"
 
+void commands_handler(server_t *server, cmd_t *commands)
+{
+    init_is_logged(server);
+    for (int i = 0; commands[i].cmd != NULL; i++) {
+        if (strcmp(server->command_arr[0], commands[i].cmd) == 0) {
+            return commands[i].fn(server, server->command_arr);
+        }
+    }
+    return msg_client(server, get_messages(INVALID_COMMAND));
+}
+
 void client_commands(server_t *server)
 {
     cmd_t commands[] = {
@@ -29,13 +40,7 @@ void client_commands(server_t *server)
     {NULL, NULL}
     };
 
-    init_is_logged(server);
-    for (int i = 0; commands[i].cmd != NULL; i++) {
-        if (strcmp(server->command_arr[0], commands[i].cmd) == 0) {
-            return commands[i].fn(server, server->command_arr);
-        }
-    }
-    return msg_client(server, get_messages(INVALID_COMMAND));
+    commands_handler(server, commands);
 }
 
 void client_handler(server_t *server, char *found, char *needle, int bytes)

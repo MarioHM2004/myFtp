@@ -6,6 +6,7 @@
 */
 
 #include <stdbool.h>
+#include <stdio.h>
 #include <string.h>
 #include <unistd.h>
 #include "../include/server.h"
@@ -58,4 +59,23 @@ void msg_data_socket(int accepted_data_socket, const char *msg)
 
     length = strlen(msg);
     write(accepted_data_socket, msg, length);
+}
+
+void build_response(server_t *server, char *server_ip, int *port)
+{
+    char response[256];
+    unsigned int h1 = 0;
+    unsigned int h2 = 0;
+    unsigned int h3 = 0;
+    unsigned int h4 = 0;
+    int p2 = 0;
+    int p1 = 0;
+
+    p1 = *port / 256;
+    p2 = *port % 256;
+    sscanf(server_ip, "%u.%u.%u.%u", &h1, &h2, &h3, &h4);
+    snprintf(response, sizeof(response),
+        "227 Entering Passive Mode (%u,%u,%u,%u,%d,%d)."
+            , h1, h2, h3, h4, p1, p2);
+    msg_client(server, response);
 }
