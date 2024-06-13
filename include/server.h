@@ -88,8 +88,9 @@ bool is_end_of_string(char ch);
 int count_tokens(char *data);
 void init_is_logged(server_t *server);
 void init_path(char **av);
-char *get_path();
+char *get_path(void);
 int accept_data_connection(server_t *server);
 void msg_data_socket(int accepted_data_socket, const char *msg);
+void build_response(server_t *server, char *server_ip, int *port);
 
 #endif
