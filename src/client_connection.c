@@ -38,6 +38,7 @@ void client_commands(server_t *server)
     {"HELP", cmd_help},
     {"DELE", cmd_dele},
     {"PASV", cmd_pasv},
+    {"RETR", cmd_retr},
     {NULL, NULL}
     };
 

@@ -86,10 +86,4 @@ void cmd_pasv(server_t *server, char **args)
     server->data_socket = enter_passive_mode(&port);
     get_local_ip_port(server, server_ip, &port);
     build_response(server, server_ip, &port);
-    server->accepted_data_socket = accept_data_connection(server);
-    if (server->accepted_data_socket == -1) {
-        msg_client(server, "425 Can't open data connection.");
-        close(server->data_socket);
-        server->data_socket = -1;
-    }
 }

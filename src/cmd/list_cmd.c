@@ -61,6 +61,7 @@ void handle_list_command(server_t *server, char **args)
             get_messages(WRONG_PATH));
     listing = reader_conditions(server, dir, args);
     msg_client(server, "150 Here comes the directory listing.");
+    server->accepted_data_socket = accept_data_connection(server);
     msg_data_socket(server->accepted_data_socket, listing);
     free(listing);
 }
@@ -68,8 +69,7 @@ void handle_list_command(server_t *server, char **args)
 void cleanup_data_connections(server_t *server)
 {
     close(server->accepted_data_socket);
-    close(server->data_socket);
-    server->data_socket = -1;
+    server->accepted_data_socket = -1;
     msg_client(server, "226 Directory send OK.");
 }
 
