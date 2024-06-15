@@ -5,8 +5,6 @@
 ** initialise
 */
 
-#include <stdlib.h>
-#include <unistd.h>
 #include "../include/server.h"
 
 void init_path(char **av)

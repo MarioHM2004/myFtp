@@ -5,9 +5,6 @@
 ** server socket
 */
 
-#include <stdlib.h>
-#include <string.h>
-#include <stdbool.h>
 #include "../../include/server.h"
 
 char *next_is_space(char *next)

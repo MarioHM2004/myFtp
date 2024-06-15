@@ -5,7 +5,6 @@
 ** server socket
 */
 
-#include <stdbool.h>
 #include "../../include/server.h"
 
 void count_tokens_handler(char *data, int *i,

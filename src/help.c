@@ -5,10 +5,6 @@
 ** help socket
 */
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <unistd.h>
 #include "../include/server.h"
 
 void error(const char *msg)

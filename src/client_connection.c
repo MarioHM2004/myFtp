@@ -5,12 +5,6 @@
 ** server socket
 */
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <sys/select.h>
-#include <unistd.h>
-#include <arpa/inet.h>
 #include "../include/server.h"
 
 void commands_handler(server_t *server, cmd_t *commands)
@@ -39,6 +33,7 @@ void client_commands(server_t *server)
     {"DELE", cmd_dele},
     {"PASV", cmd_pasv},
     {"RETR", cmd_retr},
+    {"STOR", cmd_stor},
     {NULL, NULL}
     };
 

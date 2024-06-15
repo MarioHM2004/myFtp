@@ -5,8 +5,6 @@
 ** server socket
 */
 
-#include <string.h>
-#include <stdbool.h>
 #include "../../include/server.h"
 
 void strip_spaces(char *data)
