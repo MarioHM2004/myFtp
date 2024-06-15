@@ -58,6 +58,7 @@ enum ErrorKinds {
     NEED_ACCOUNT,
     WRONG_PATH,
     INVALID_FILE,
+    TRANSFER_FAILED,
     _KIND_COUNT,
 };
 
@@ -80,6 +81,7 @@ void cmd_noop(server_t *server, char **args);
 void cmd_dele(server_t *server, char **args);
 void cmd_pasv(server_t *server, char **args);
 void cmd_help(server_t *server, char **args);
+void cmd_retr(server_t *server, char **args);
 void init_users(server_t *server);
 const char *get_messages(enum ErrorKinds kind);
 void strip_spaces(char *data);
