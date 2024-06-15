@@ -14,7 +14,11 @@ SRC	=	./src/main.c					\
 		./src/cmd/quit_cmd.c			\
 		./src/cmd/list_cmd.c			\
 		./src/cmd/pasv_cmd.c			\
-		./src/cmd/file_cmd.c			\
+		./src/cmd/dele_cmd.c			\
+		./src/cmd/retr_cmd.c			\
+		./src/cmd/stor_cmd.c			\
+		./src/cmd/noop_cmd.c			\
+		./src/cmd/help_cmd.c			\
 		./src/init.c					\
 		./src/messages.c				\
 		./src/parser/command_parser.c	\
