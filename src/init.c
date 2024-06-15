@@ -22,7 +22,6 @@ void init_users(server_t *server)
 
     (*server).users = malloc(sizeof(*server->users));
     user = server->users + 0;
-    user->username = "Anonymous";
     user->password = "";
     user->logged_in = 0;
     user->awaiting_pass = 0;

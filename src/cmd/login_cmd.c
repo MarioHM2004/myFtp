@@ -25,10 +25,9 @@ void cmd_user(server_t *server, char **args)
         return msg_client(server, get_messages(INVALID_ARGUMENTS));
     if (server->is_logged && (strcmp(user->username, username) == 0))
         return msg_client(server, get_messages(USER_LOGGED));
-    if (strcmp(user->username, username) != 0)
-        return msg_client(server, get_messages(INVALID_USERNAME));
-    if (strcmp(user->username, username) == 0) {
+    if (username) {
         user->awaiting_pass = server->client_socket;
+        user->username = username;
         return msg_client(server, "331 User name okay, need password.");
     }
 }
