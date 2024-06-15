@@ -9,7 +9,9 @@
 
 void cmd_help(server_t *server, char **args)
 {
-    msg_client(server, "214 Help message.\nUSER\tPASS\tCWD\tCDUP");
+    msg_client(server, "214 Help message.");
+    msg_client(server, "USER\tPASS\tCWD\tCDUP");
     msg_client(server, "QUIT\tPORT\tPASV\tRETR");
-    msg_client(server, "STOR\tDELE\tPWD\tLIST\nHELP\tNOOP");
+    msg_client(server, "STOR\tDELE\tPWD\tLIST");
+    msg_client(server, "HELP\tNOOP");
 }
