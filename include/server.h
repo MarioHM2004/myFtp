@@ -9,6 +9,13 @@
 #include <stddef.h>
 #include <sys/select.h>
 #include <stdbool.h>
+#include <unistd.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <dirent.h>
+#include <fcntl.h>
+#include <string.h>
 
 #ifndef SERVER_H
     #define SERVER_H
@@ -82,6 +89,7 @@ void cmd_dele(server_t *server, char **args);
 void cmd_pasv(server_t *server, char **args);
 void cmd_help(server_t *server, char **args);
 void cmd_retr(server_t *server, char **args);
+void cmd_stor(server_t *server, char **args);
 void init_users(server_t *server);
 const char *get_messages(enum ErrorKinds kind);
 void strip_spaces(char *data);
