@@ -5,12 +5,6 @@
 ** commands functions
 */
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <unistd.h>
-#include <arpa/inet.h>
-#include <stdbool.h>
 #include "../../include/server.h"
 
 void cmd_user(server_t *server, char **args)

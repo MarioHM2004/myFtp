@@ -5,12 +5,7 @@
 ** commands functions
 */
 
-#include <stdlib.h>
-#include <string.h>
-#include <unistd.h>
-#include <arpa/inet.h>
-#include <stdbool.h>
-#include <dirent.h>
+
 #include "../../include/server.h"
 
 char *reader_conditions(server_t *server, DIR *dir, char **args)
